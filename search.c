@@ -55,6 +55,7 @@ void append_path(Paths *paths, char *path) {
 Paths *init_paths() {
     Paths *paths = (Paths *)malloc(sizeof(Paths));
     paths->n_paths = 0;
+    paths->paths = (char **)malloc(sizeof(paths->n_paths));
     return paths;
 }
 
@@ -96,15 +97,16 @@ void show_path(char *path) {
     for(i=0; i<strlen(path); i++) {
         printf("%c ", path[i]);
     }
-    printf("\n\n");
+    printf("\n");
 }
 
 void show_paths(Paths *paths) {
     int i;
-    printf("n_paths:%d\n", paths->n_paths);
+    printf("The list of all paths\n");
     for(i=0; i<paths->n_paths; i++) {
         show_path(paths->paths[i]);
     }
+    printf("\n");
 }
 
 void free_path(char* path) {

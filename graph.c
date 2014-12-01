@@ -22,12 +22,18 @@ Node *create_node(char label) {
     return node;
 }
 
-//connect node1 to node2 
+//connect a to b 
+void connect_(Node *a, Node *b) {
+    a->neighbors = (Node **)realloc(a->neighbors, 
+                                        (a->n_neighbors+1)*sizeof(Node *));
+    a->neighbors[a->n_neighbors] = b;
+    a->n_neighbors += 1;
+}
+
+//connect both
 void connect(Node *node1, Node *node2) {
-    node1->neighbors = (Node **)realloc(node1->neighbors, 
-                                        (node1->n_neighbors+1)*sizeof(Node *));
-    node1->neighbors[node1->n_neighbors] = node2;
-    node1->n_neighbors += 1;
+    connect_(node1, node2);
+    connect_(node2, node1);
 }
 
 //allocate memory for a graph and set default values
