@@ -50,14 +50,20 @@ int main(void) {
     add_node(graph, J);
     add_node(graph, K);
 
+    printf("graph\n");
     show_graph(graph);
+    
+    printf("\n");
 
     char *path = depth_first_search(graph, A, K);
     printf("The result of DFS\n");
     show_path(path);
     free_path(path);
     
+    printf("\n");
+    
     Paths *paths = find_all_paths(graph, A, K);
+    printf("The list of all paths\n");
     show_paths(paths);
     free_paths(paths);
 

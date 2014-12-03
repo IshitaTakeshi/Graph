@@ -61,10 +61,8 @@ void show_node(Node *node) {
 
 void show_graph(Graph *graph) {
     int i;
-    printf("graph\n");
     for(i=0; i<graph->n_nodes; i++) {
         printf("  ");
         show_node(graph->nodes[i]);
     }
-    printf("\n");
 }

@@ -109,11 +109,9 @@ void show_path(char *path) {
 
 void show_paths(Paths *paths) {
     int i;
-    printf("The list of all paths\n");
     for(i=0; i<paths->n_paths; i++) {
         show_path(paths->paths[i]);
     }
-    printf("\n");
 }
 
 void free_path(char* path) {
