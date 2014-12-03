@@ -6,14 +6,14 @@
 
 
 //append a single character to a string
-char *append_char(char *string, char character) {
-    int len = strlen(string);
-    char *new_string = (char *)malloc(len+2);
-    strncpy(new_string, string, len);
-    new_string[len] = character;
-    new_string[len+1] = '\0';
-    return new_string;
-}
+//char *append_char(char *string, char character) {
+//    int len = strlen(string);
+//    char *new_string = (char *)malloc(len+2);
+//    strncpy(new_string, string, len);
+//    new_string[len] = character;
+//    new_string[len+1] = '\0';
+//    return new_string;
+//}
 
 char *depth_first_search_(
     Graph *graph, Node *start, Node *end, char *path, int path_index) {
@@ -62,8 +62,12 @@ Paths *init_paths() {
     return paths;
 }
 
-Paths *find_all_paths_(Graph *graph, Node *start, Node *end, char *path_) {
-    char *path = append_char(path_, start->label);
+Paths *find_all_paths_(
+        Graph *graph, Node *start, Node *end, char *path_, int depth) {
+    char *path = (char *)malloc(graph->n_nodes);
+    strncpy(path, path_, depth+1);
+    path[depth] = start->label;
+    path[depth+1] = '\0';
 
     if(start->label == end->label) {
         Paths *p = init_paths();
@@ -80,7 +84,7 @@ Paths *find_all_paths_(Graph *graph, Node *start, Node *end, char *path_) {
             continue;
         }
 
-        Paths *new_paths = find_all_paths_(graph, node, end, path);
+        Paths *new_paths = find_all_paths_(graph, node, end, path, depth+1);
         for(j=0; j<new_paths->n_paths; j++) {
             append_path(paths, new_paths->paths[j]);
         }
@@ -91,7 +95,7 @@ Paths *find_all_paths_(Graph *graph, Node *start, Node *end, char *path_) {
 }
 
 Paths *find_all_paths(Graph *graph, Node *start, Node *end) {
-    return find_all_paths_(graph, start, end, "");
+    return find_all_paths_(graph, start, end, "", 0);
 }
 
 void show_path(char *path) {
