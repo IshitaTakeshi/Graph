@@ -15,10 +15,12 @@ char *append_char(char *string, char character) {
     return new_string;
 }
 
-char *depth_first_search_(Graph *graph, Node *start, Node *end, char *path_) {
-    char *path = append_char(path_, start->label);
+char *depth_first_search_(
+    Graph *graph, Node *start, Node *end, char *path, int path_index) {
+    path[path_index] = start->label;
 
     if(start->label == end->label) {
+        path[path_index+1] = '\0';
         return path;
     }
 
@@ -30,19 +32,20 @@ char *depth_first_search_(Graph *graph, Node *start, Node *end, char *path_) {
             continue;
         }
 
-        char *new_path = depth_first_search_(graph, node, end, path);
+        char *new_path = depth_first_search_(graph, node, end, path, 
+                                             path_index+1);
         if(new_path != NULL) {
-            free(path);
             return new_path;
         }
     }
-
     free(path);
     return NULL;
 }
 
 char *depth_first_search(Graph *graph, Node *start, Node *end) {
-    return depth_first_search_(graph, start, end, "");
+    //char path[graph->n_nodes+1];
+    char *path = (char *)malloc(graph->n_nodes+1);
+    return depth_first_search_(graph, start, end, path, 0);
 }
 
 void append_path(Paths *paths, char *path) {

@@ -55,7 +55,7 @@ int main(void) {
     char *path = depth_first_search(graph, A, K);
     printf("The result of DFS\n");
     show_path(path);
-    printf("\n");
+    free_path(path);
     
     Paths *paths = find_all_paths(graph, A, K);
     show_paths(paths);
