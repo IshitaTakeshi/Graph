@@ -1,4 +1,11 @@
-#Graph search algorithms in C
+#Graph search algorithms
 
-##Currently implemented  
+##Currently implemented
 * Depth-first search
+
+##How to run
+```
+$make
+$test
+```
+

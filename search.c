@@ -42,6 +42,7 @@ char *depth_first_search_(
     return NULL;
 }
 
+//search the path from start to end
 char *depth_first_search(Graph *graph, Node *start, Node *end) {
     //char path[graph->n_nodes+1];
     char *path = (char *)malloc(graph->n_nodes+1);
@@ -94,6 +95,7 @@ Paths *find_all_paths_(
     return paths;
 }
 
+//search all paths from start to end
 Paths *find_all_paths(Graph *graph, Node *start, Node *end) {
     return find_all_paths_(graph, start, end, "", 0);
 }

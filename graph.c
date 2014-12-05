@@ -30,7 +30,7 @@ void connect_(Node *a, Node *b) {
     a->n_neighbors += 1;
 }
 
-//connect both
+//connect both to represent an undirected path
 void connect(Node *node1, Node *node2) {
     connect_(node1, node2);
     connect_(node2, node1);
