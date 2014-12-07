@@ -6,8 +6,8 @@
 
 ##How to run
 ```
-$make
-$test bfs #Breadth-first search
-$test dfs #Depth-first search
+$make bfs #Breadth-first search
+$make dfs #Depth-first search
+$./test
 ```
 
