@@ -4,6 +4,7 @@ typedef struct paths_t {
 } Paths;
 
 char *depth_first_search(Graph *graph, Node *start, Node *end);
+char *breath_first_search(Graph *graph, Node *start, Node *end);
 Paths *find_all_paths(Graph *graph, Node *start, Node *end);
 void show_path(char *path);
 void show_paths(Paths *paths);

@@ -12,7 +12,6 @@ void **queue;
  */
 void init_queue(int size_) {
     //Allocate memory and initialize indices
-    int i;
     queue_size = size_;
     memory_size = queue_size+1;
     queue = (void **)malloc(size_*sizeof(void *));

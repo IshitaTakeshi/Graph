@@ -1,7 +1,7 @@
 typedef struct node_t {
     char label;
     int n_neighbors;
-    struct node_t **neighbors; //list of pointers of nodes
+    struct node_t **neighbors; //list of pointers of adjacent nodes
 } Node;
 
 typedef struct graph_t {

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "graph.h"
 #include "search.h"
+#include "queue.h"
 
 
 //append a single character to a string
@@ -32,7 +33,7 @@ char *depth_first_search_(
             continue;
         }
 
-        char *new_path = depth_first_search_(graph, node, end, path, 
+        char *new_path = depth_first_search_(graph, node, end, path,
                                              path_index+1);
         if(new_path != NULL) {
             return new_path;
@@ -44,13 +45,13 @@ char *depth_first_search_(
 
 //search the path from start to end
 char *depth_first_search(Graph *graph, Node *start, Node *end) {
-    //char path[graph->n_nodes+1];
+    //+1 for '\0'
     char *path = (char *)malloc(graph->n_nodes+1);
     return depth_first_search_(graph, start, end, path, 0);
 }
 
 void append_path(Paths *paths, char *path) {
-    paths->paths = (char **)realloc(paths->paths, 
+    paths->paths = (char **)realloc(paths->paths,
                                     (paths->n_paths+1)*sizeof(char *));
     paths->paths[paths->n_paths] = path;
     paths->n_paths += 1;
@@ -98,6 +99,55 @@ Paths *find_all_paths_(
 //search all paths from start to end
 Paths *find_all_paths(Graph *graph, Node *start, Node *end) {
     return find_all_paths_(graph, start, end, "", 0);
+}
+
+char *breath_first_search(Graph *graph, Node *start, Node *end) {
+    Node *neighbor;
+    Node *node;
+
+    char visited[graph->n_nodes+1];
+    int visited_index = 0;
+    visited[0] = '\0';
+
+    char *path = (char *)malloc(graph->n_nodes+1);  //+1 for '\0'
+    int path_index = 0;
+
+    int i;
+
+    init_queue(graph->n_nodes);
+    enqueue(start);
+
+    while(!queue_is_empty()) {
+        node = (Node *)dequeue();
+
+        if(strchr(path, node->label) == NULL) {
+            path[path_index] = node->label;
+            path_index += 1;
+        }
+
+        if(node->label == end->label) {
+            path[path_index] = '\0';
+            return path;
+        }
+
+        for(i=0; i<node->n_neighbors; i++) {
+            neighbor = node->neighbors[i];
+
+            //do nothing if the node is already visited
+            if(strchr(visited, neighbor->label) != NULL) {
+                continue;
+            }
+
+            visited[visited_index] = neighbor->label;
+            visited[visited_index+1] = '\0';
+            visited_index += 1;
+
+            enqueue(neighbor);
+        }
+    }
+
+    free_queue();
+    return NULL;
 }
 
 void show_path(char *path) {
