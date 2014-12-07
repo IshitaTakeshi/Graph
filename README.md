@@ -5,9 +5,14 @@
 * Breadth-first search
 
 ##How to run
+###Breadth-first search
 ```
-$make bfs #Breadth-first search
-$make dfs #Depth-first search
+$make bfs
+$./test
+```
+###Depth-first search
+```
+$make dfs
 $./test
 ```
 
