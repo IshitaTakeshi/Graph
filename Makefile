@@ -1,10 +1,25 @@
+
+CC=gcc
+CFLAGS=-std=c99 -pedantic -Wall -Werror -g
+
+SRC=graph.c search.c queue.c
+OBJS=$(SRC:.c=.o)
+
+TARGET=test
+
+.c.o:
+	$(CC) $(CFLAGS) $< -c -o $@
+
+bfs: $(OBJS)
+	${CC} ${CFLAGS} $^ bfs_test.c -o $(TARGET)
+
+dfs: $(OBJS)
+	${CC} ${CFLAGS} $^ dfs_test.c -o $(TARGET)
+
 all: bfs
 
-bfs:
-	gcc graph.c search.c queue.c bfs_test.c -o test -g -Wall
-
-dfs:
-	gcc graph.c search.c queue.c dfs_test.c -o test -g -Wall
+run:
+	./$(TARGET)
 
 clean:
-	rm -f test
+	-@$(RM) $(TARGET) $(OBJS)
