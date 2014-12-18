@@ -24,11 +24,13 @@ Node *create_node(char label) {
 }
 
 //Connect a to b
-void connect_(Node *a, Node *b, double weight) {
-    a->neighbors = (Node **)realloc(a->neighbors,
-                                    (a->n_neighbors+1)*sizeof(Node *));
-    a->weights = (double *)realloc(a->weights,
-                                   (a->n_neighbors+1)*sizeof(double));
+void connect_(Node *a, Node *b) {
+    if(a->n_neighbors == 0) {
+        a->neighbors = (Node **)malloc((a->n_neighbors+1)*sizeof(Node *));
+    } else {
+        a->neighbors = (Node **)realloc(a->neighbors,
+                                        (a->n_neighbors+1)*sizeof(Node *));
+    }
     a->neighbors[a->n_neighbors] = b;
     a->weights[a->n_neighbors] = weight;
     a->n_neighbors += 1;
@@ -73,8 +75,12 @@ int are_same_nodes(Node *node1, Node *node2) {
 
 //Add a node to a graph
 void add_node(Graph *graph, Node *node) {
-    graph->nodes = (Node **)realloc(graph->nodes,
-                                    (graph->n_nodes+1)*sizeof(Node *));
+    if(graph->n_nodes == 0) {
+        graph->nodes = (Node **)malloc((graph->n_nodes+1)*sizeof(Node *));
+    } else {
+        graph->nodes = (Node **)realloc(graph->nodes,
+                                        (graph->n_nodes+1)*sizeof(Node *));
+    }
     graph->nodes[graph->n_nodes] = node;
     graph->n_nodes += 1;
 }
