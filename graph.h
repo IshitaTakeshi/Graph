@@ -19,10 +19,12 @@ typedef struct graph_t {
 void free_graph(struct graph_t *graph);
 Node *create_node(char label);
 void connect(Node *node1, Node *node2);
-void connect_weighted(Node *node1, Node *node2, double weight);
+void wconnect(Node *node1, Node *node2, double weight);
 Graph *init_graph();
 void add_node(Graph *graph, Node *node);
 int are_same_nodes(Node *node1, Node *node2);
+Node *get_node(Graph *graph, char label);
+int node_exists(Graph *graph, char label);
 void show_node(Node *node, int show_weight);
 void show_graph(Graph *graph, int show_weight);
 

@@ -9,27 +9,17 @@
 #include "error.h"
 
 
-/* append a single character to a string */
-/*
-char *append_char(char *string, char character) {
-    int len = strlen(string);
-    char *new_string = (char *)malloc(len+2);
-    strncpy(new_string, string, len);
-    new_string[len] = character;
-    new_string[len+1] = '\0';
-    return new_string;
-}
-*/
-
-char *depth_first_search_(
+Path *depth_first_search_(
     Graph *graph, Node *start, Node *end, char *path, int path_index) {
     int i;
 
     path[path_index] = start->label;
+    path[path_index+1] = '\0';
 
     if(start->label == end->label) {
-        path[path_index+1] = '\0';
-        return path;
+        Path *p = (Path *)malloc(sizeof(Path));
+        p->path = path;
+        return p;
     }
 
     for(i=0; i<start->n_neighbors; i++) {
@@ -39,7 +29,7 @@ char *depth_first_search_(
             continue;
         }
 
-        char *new_path = depth_first_search_(graph, node, end, path,
+        Path *new_path = depth_first_search_(graph, node, end, path,
                                              path_index+1);
         if(new_path != NULL) {
             return new_path;
@@ -50,15 +40,15 @@ char *depth_first_search_(
 }
 
 /* search the path from start to end */
-char *depth_first_search(Graph *graph, Node *start, Node *end) {
+Path *depth_first_search(Graph *graph, Node *start, Node *end) {
     /* +1 for '\0' */
     char *path = (char *)malloc(graph->n_nodes+1);
     return depth_first_search_(graph, start, end, path, 0);
 }
 
-void append_path(Paths *paths, char *path) {
-    paths->paths = (char **)realloc(paths->paths,
-                                    (paths->n_paths+1)*sizeof(char *));
+void append_path(Paths *paths, Path *path) {
+    paths->paths = (Path **)realloc(paths->paths,
+                                    (paths->n_paths+1)*sizeof(Path *));
     paths->paths[paths->n_paths] = path;
     paths->n_paths += 1;
 }
@@ -66,7 +56,7 @@ void append_path(Paths *paths, char *path) {
 Paths *init_paths() {
     Paths *paths = (Paths *)malloc(sizeof(Paths));
     paths->n_paths = 0;
-    paths->paths = (char **)malloc(sizeof(paths->n_paths));
+    paths->paths = (Path **)malloc(paths->n_paths * sizeof(Path *));
     return paths;
 }
 
@@ -78,9 +68,11 @@ Paths *find_all_paths_(
     path[depth+1] = '\0';
 
     if(start->label == end->label) {
-        Paths *p = init_paths();
-        append_path(p, path);
-        return p;
+        Paths *ps = init_paths();
+        Path *p = (Path *)malloc(sizeof(Path));
+        p->path = path;
+        append_path(ps, p);
+        return ps;
     }
 
     Paths *paths = init_paths();
@@ -194,7 +186,7 @@ int get_node_index(Graph *graph, Node *node) {
  * explanation is here
  * http://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Pseudocode
  */
-char *dijkstra(Graph *graph, Node *start, Node *end) {
+Path *dijkstra(Graph *graph, Node *start, Node *end) {
     int i;
     Node *neighbor;
     Node *node;
@@ -204,7 +196,8 @@ char *dijkstra(Graph *graph, Node *start, Node *end) {
     double shortest;
     int previous[graph->n_nodes];
     int visited[graph->n_nodes];
-    int n_visited, index, shortest_index;
+    int path_indices[graph->n_nodes];
+    int n_visited, index, shortest_index, path_length, u;
 
     for(i = 0; i < graph->n_nodes; i++) {
         node = graph->nodes[i];
@@ -230,10 +223,6 @@ char *dijkstra(Graph *graph, Node *start, Node *end) {
             }
         }
 
-        if(are_same_nodes(graph->nodes[shortest_index], end)) {
-            break;
-        }
-
         current = graph->nodes[shortest_index];
         visited[shortest_index] = 1;
         n_visited += 1;
@@ -254,12 +243,6 @@ char *dijkstra(Graph *graph, Node *start, Node *end) {
         }
     }
 
-    int path_indices[graph->n_nodes];
-    int p;
-    int path_length;
-    int path_index;
-
-    int u;
     path_length = 0;
     u = get_node_index(graph, end);
     while(u != -1) {
@@ -268,35 +251,41 @@ char *dijkstra(Graph *graph, Node *start, Node *end) {
         path_length += 1;
     }
 
+    Path *path = (Path *)malloc(sizeof(Path));
+    char *p = (char *)malloc(path_length+1);
     for(i = 0; i < path_length; i++) {
-        path_index = path_indices[i];
+        index = path_indices[path_length-i-1];
+        p[i] = graph->nodes[index]->label;
     }
+    p[path_length] = '\0';
 
-    char *path = (char *)malloc(path_length+1);
-    for(i = 0; i < path_length; i++) {
-        path_index = path_indices[path_length-i-1];
-        path[i] = graph->nodes[path_index]->label;
-    }
+    i = get_node_index(graph, end);
+    path->path = p;
+    path->cost = distances[i];
     return path;
 }
 
-void show_path(char *path) {
+void show_path(Path *path, int show_cost) {
     int i;
-    printf("  ");
-    for(i=0; i<strlen(path); i++) {
-        printf("%c ", path[i]);
+    printf("  path: ");
+    for(i=0; i<strlen(path->path); i++) {
+        printf("%c ", path->path[i]);
+    }
+    if(show_cost) {
+        printf("cost: %lf", path->cost);
     }
     printf("\n");
 }
 
-void show_paths(Paths *paths) {
+void show_paths(Paths *paths, int show_cost) {
     int i;
     for(i=0; i<paths->n_paths; i++) {
-        show_path(paths->paths[i]);
+        show_path(paths->paths[i], show_cost);
     }
 }
 
-void free_path(char* path) {
+void free_path(Path *path) {
+    free(path->path);
     free(path);
 }
 

@@ -18,22 +18,45 @@ void free_graph(struct graph_t *graph) {
 Node *create_node(char label) {
     Node *node;
     node = (Node *)malloc(sizeof(Node));
-    node->n_neighbors = 0;
     node->label = label;
+    node->n_neighbors = 0;
+    node->neighbors = (Node **)malloc(node->n_neighbors*sizeof(Node *));
+    node->weights = (double *)malloc(node->n_neighbors*sizeof(double));
     return node;
 }
 
 //Connect a to b
-void connect_(Node *a, Node *b) {
-    if(a->n_neighbors == 0) {
-        a->neighbors = (Node **)malloc((a->n_neighbors+1)*sizeof(Node *));
-    } else {
-        a->neighbors = (Node **)realloc(a->neighbors,
-                                        (a->n_neighbors+1)*sizeof(Node *));
-    }
+void connect_(Node *a, Node *b, double weight) {
+    a->neighbors = (Node **)realloc(a->neighbors,
+                                    (a->n_neighbors+1)*sizeof(Node *));
+    a->weights = (double *)realloc(a->weights,
+                                   (a->n_neighbors+1)*sizeof(double));
     a->neighbors[a->n_neighbors] = b;
     a->weights[a->n_neighbors] = weight;
     a->n_neighbors += 1;
+}
+
+/*
+ * Returns
+ * 1 if the node which its label is 'label' exists in the graph
+ * 0 otherwise
+ */
+//TODO test
+Node *get_node(Graph *graph, char label) {
+    int i;
+    Node *node;
+    for(i = 0; i < graph->n_nodes; i++) {
+        node = graph->nodes[i];
+        if(node->label == label) {
+            return node;
+        }
+    }
+    return NULL;
+}
+
+/* TODO test */
+int node_exists(Graph *graph, char label) {
+    return get_node(graph, label) != NULL;
 }
 
 //Returns 1 if a is connected to b 0 otherwise
@@ -56,7 +79,7 @@ void connect(Node *node1, Node *node2) {
     connect_(node2, node1, 0);
 }
 
-void connect_weighted(Node *node1, Node *node2, double weight) {
+void wconnect(Node *node1, Node *node2, double weight) {
     connect_(node1, node2, weight);
     connect_(node2, node1, weight);
 }
@@ -65,6 +88,7 @@ void connect_weighted(Node *node1, Node *node2, double weight) {
 Graph *init_graph() {
     Graph *graph = (Graph *)malloc(sizeof(Graph));
     graph->n_nodes = 0;
+    graph->nodes = (Node **)malloc(graph->n_nodes*sizeof(Node *));
     return graph;
 }
 
@@ -75,11 +99,8 @@ int are_same_nodes(Node *node1, Node *node2) {
 
 //Add a node to a graph
 void add_node(Graph *graph, Node *node) {
-    if(graph->n_nodes == 0) {
-        graph->nodes = (Node **)malloc((graph->n_nodes+1)*sizeof(Node *));
-    } else {
-        graph->nodes = (Node **)realloc(graph->nodes, (graph->n_nodes+1)*sizeof(Node *));
-    }
+    graph->nodes = (Node **)realloc(graph->nodes,
+                                    (graph->n_nodes+1)*sizeof(Node *));
 
     graph->nodes[graph->n_nodes] = node;
     graph->n_nodes += 1;

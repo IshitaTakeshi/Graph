@@ -28,10 +28,10 @@ int main(void) {
     connect(C, D); connect(C, G);
     connect(D, H); connect(D, I); connect(D, J);
     connect(E, F); connect(E, H); connect(E, J);
-    connect(F, G); connect(F, K); 
-    connect(H, J); 
-    connect(J, K);  
-    
+    connect(F, G); connect(F, K);
+    connect(H, J);
+    connect(J, K);
+
     add_node(graph, A);
     add_node(graph, B);
     add_node(graph, C);
@@ -45,7 +45,7 @@ int main(void) {
     add_node(graph, K);
 
     printf("graph\n");
-    show_graph(graph);
+    show_graph(graph, 0);
 
     path = breath_first_search(graph, A, K);
     printf("path:%s\n", path);

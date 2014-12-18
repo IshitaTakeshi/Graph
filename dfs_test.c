@@ -7,7 +7,7 @@
 int main(void) {
     Graph *graph;
     Node *A, *B, *C, *D, *E, *F, *G, *H, *I, *J, *K;
-    char *path;
+    Path *path;
     Paths *paths;
 
     graph = init_graph();
@@ -46,20 +46,20 @@ int main(void) {
     add_node(graph, K);
 
     printf("graph\n");
-    show_graph(graph);
+    show_graph(graph, 0);
 
     printf("\n");
 
     path = depth_first_search(graph, A, K);
     printf("The result of Depth-first search\n");
-    show_path(path);
+    show_path(path, 0);
     free_path(path);
 
     printf("\n");
 
     paths = find_all_paths(graph, A, K);
     printf("The list of all paths\n");
-    show_paths(paths);
+    show_paths(paths, 0);
     free_paths(paths);
 
     free_graph(graph);
