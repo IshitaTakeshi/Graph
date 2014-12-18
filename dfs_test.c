@@ -6,9 +6,11 @@
 
 int main(void) {
     Graph *graph;
-    graph = init_graph();
-
     Node *A, *B, *C, *D, *E, *F, *G, *H, *I, *J, *K;
+    char *path;
+    Paths *paths;
+
+    graph = init_graph();
 
     A = create_node('A');
     B = create_node('B');
@@ -22,22 +24,15 @@ int main(void) {
     J = create_node('J');
     K = create_node('K');
 
-    //connect(A, B); connect(A, C);
-    //connect(B, C); connect(B, D);
-    //connect(C, D); 
-    //connect(D, C);
-    //connect(E, F); 
-    //connect(F, C);
-
     connect(A, C); connect(A, I);
     connect(B, D); connect(B, G); connect(B, H);
     connect(C, D); connect(C, G);
     connect(D, H); connect(D, I); connect(D, J);
     connect(E, F); connect(E, H); connect(E, J);
-    connect(F, G); connect(F, K); 
-    connect(H, J); 
-    connect(J, K);  
-    
+    connect(F, G); connect(F, K);
+    connect(H, J);
+    connect(J, K);
+
     add_node(graph, A);
     add_node(graph, B);
     add_node(graph, C);
@@ -52,17 +47,17 @@ int main(void) {
 
     printf("graph\n");
     show_graph(graph);
-    
+
     printf("\n");
 
-    char *path = depth_first_search(graph, A, K);
+    path = depth_first_search(graph, A, K);
     printf("The result of Depth-first search\n");
     show_path(path);
     free_path(path);
-    
+
     printf("\n");
-    
-    Paths *paths = find_all_paths(graph, A, K);
+
+    paths = find_all_paths(graph, A, K);
     printf("The list of all paths\n");
     show_paths(paths);
     free_paths(paths);

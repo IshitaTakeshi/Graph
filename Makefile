@@ -1,8 +1,8 @@
 
 CC=gcc
-CFLAGS=-std=c99 -pedantic -Wall -Werror -g
+CFLAGS=-std=c99 -pedantic -g -Wall -Werror
 
-SRC=graph.c search.c queue.c
+SRC=graph.c search.c queue.c error.c
 OBJS=$(SRC:.c=.o)
 
 TARGET=test
@@ -16,7 +16,10 @@ bfs: $(OBJS)
 dfs: $(OBJS)
 	${CC} ${CFLAGS} $^ dfs_test.c -o $(TARGET)
 
-all: bfs
+dijkstra: $(OBJS)
+	${CC} ${CFLAGS} $^ dijkstra_test.c -o $(TARGET)
+
+all: dijkstra
 
 run:
 	./$(TARGET)

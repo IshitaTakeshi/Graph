@@ -6,9 +6,10 @@
 
 int main(void) {
     Graph *graph;
-    graph = init_graph();
-
     Node *A, *B, *C, *D, *E, *F, *G, *H, *I, *J, *K;
+    char *path;
+
+    graph = init_graph();
 
     A = create_node('A');
     B = create_node('B');
@@ -46,7 +47,7 @@ int main(void) {
     printf("graph\n");
     show_graph(graph);
 
-    char *path = breath_first_search(graph, A, K);
+    path = breath_first_search(graph, A, K);
     printf("path:%s\n", path);
     free(path);
 

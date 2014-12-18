@@ -11,7 +11,7 @@ void **queue;
  * size_ : the size of a queue
  */
 void init_queue(int size_) {
-    //Allocate memory and initialize indices
+    /* Allocate memory and initialize indices */
     queue_size = size_;
     memory_size = queue_size+1;
     queue = (void **)malloc(size_*sizeof(void *));
@@ -49,6 +49,7 @@ void enqueue(void *item) {
 
 /*
  * Dequeueing.
+ * Returns the address of the item
  */
 void *dequeue() {
     if(queue_is_empty()) {
