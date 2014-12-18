@@ -78,9 +78,9 @@ void add_node(Graph *graph, Node *node) {
     if(graph->n_nodes == 0) {
         graph->nodes = (Node **)malloc((graph->n_nodes+1)*sizeof(Node *));
     } else {
-        graph->nodes = (Node **)realloc(graph->nodes,
-                                        (graph->n_nodes+1)*sizeof(Node *));
+        graph->nodes = (Node **)realloc(graph->nodes, (graph->n_nodes+1)*sizeof(Node *));
     }
+
     graph->nodes[graph->n_nodes] = node;
     graph->n_nodes += 1;
 }
